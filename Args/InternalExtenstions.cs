@@ -91,9 +91,9 @@ namespace Args
         }
     }
 
-    internal static class ExpressionExtensions
+    public static class ExpressionExtensions
     {
-        internal static MemberInfo GetMemberInfoFromExpression<T, TReturn>(this Expression<Func<T, TReturn>> expression)
+        public static MemberInfo GetMemberInfoFromExpression<T, TReturn>(this Expression<Func<T, TReturn>> expression)
         {
             var member = expression.Body as MemberExpression;
             if (member == null) throw new InvalidOperationException("Only member access expressions may be used.");

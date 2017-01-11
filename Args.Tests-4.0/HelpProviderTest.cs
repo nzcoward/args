@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Args.Help;
-using FluentAssertions;
-
+using SharpTestsEx;
 
 namespace Args.Tests
 {
@@ -42,29 +41,29 @@ namespace Args.Tests
 
             var result = help.GenerateModelHelp(config);
 
-            result.SwitchDelimiter.Should().Be("//");
-            result.Members.Count().Should().Be(4);
-            result.HelpText.Should().Be("This is my console application");
+            result.SwitchDelimiter.Should().Be.EqualTo("//");
+            result.Members.Count().Should().Be.EqualTo(4);
+            result.HelpText.Should().Be.EqualTo("This is my console application");
 
             var m = result.Members.Where(h => h.Name == "Id").Single();
-            m.HelpText.Should().Be("This is the Id");
-            m.OrdinalIndex.Should().Be(default(int?));
-            m.Switches.Should().BeEquivalentTo(new[] { "Id", "I" });
+            m.HelpText.Should().Be.EqualTo("This is the Id");
+            m.OrdinalIndex.Should().Be.EqualTo(default(int?));
+            m.Switches.Should().Have.SameSequenceAs(new[] { "Id", "I" });
 
             m = result.Members.Where(h => h.Name == "Name").Single();
-            m.HelpText.Should().Be("This is the name you should put in.");
-            m.OrdinalIndex.Should().Be(default(int?));
-            m.Switches.Should().BeEquivalentTo(new[] { "Name", "N" });
+            m.HelpText.Should().Be.EqualTo("This is the name you should put in.");
+            m.OrdinalIndex.Should().Be.EqualTo(default(int?));
+            m.Switches.Should().Have.SameSequenceAs(new[] { "Name", "N" });
 
             m = result.Members.Where(h => h.Name == "Switch").Single();
-            m.HelpText.Should().Be("Force it!");
-            m.OrdinalIndex.Should().Be(default(int?));
-            m.Switches.Should().BeEquivalentTo(new[] { "Switch", "S" });
+            m.HelpText.Should().Be.EqualTo("Force it!");
+            m.OrdinalIndex.Should().Be.EqualTo(default(int?));
+            m.Switches.Should().Have.SameSequenceAs(new[] { "Switch", "S" });
 
             m = result.Members.Where(h => h.Name == "Date").Single();
-            m.HelpText.Should().Be("Effective date");
-            m.OrdinalIndex.Should().Be(0);
-            m.Switches.Should().BeEmpty();
+            m.HelpText.Should().Be.EqualTo("Effective date");
+            m.OrdinalIndex.Should().Be.EqualTo(0);
+            m.Switches.Should().Be.Empty();
         }
     }
 }

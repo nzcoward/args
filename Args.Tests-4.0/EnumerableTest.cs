@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using FluentAssertions;
-
+using SharpTestsEx;
 using System.Collections.ObjectModel;
 
 namespace Args.Tests
@@ -41,14 +40,14 @@ namespace Args.Tests
             var args = new[] { "/i", "123", "/n", "My Name", "/d", "1/1/2000", "1/1/2001", "/q", "5", "9", "100", "/t", "12.01", "10.55", "43", "107.6", "/s", "true", "true", "false", "false", "false", "/r", "1.2", "2.3" };
 
             var test = switchOnlyModelUnderTest.Value.CreateAndBind(args);
-            test.Id.Should().Be(123);
-            test.Name.Should().Be("My Name");
+            test.Id.Should().Be.EqualTo(123);
+            test.Name.Should().Be.EqualTo("My Name");
             
-            test.Date.SequenceEqual(new[] { new DateTime(2000, 1, 1), new DateTime(2001, 1, 1) }).Should().BeTrue();
-            test.Quantities.SequenceEqual(new[] { 5, 9, 100 }).Should().BeTrue();
-            test.Totals.SequenceEqual(new[] { 12.01M, 10.55M, 43M, 107.6M }).Should().BeTrue();
-            test.Switches.SequenceEqual(new[] { true, true, false, false, false}).Should().BeTrue();
-            test.Radians.SequenceEqual(new[] { 1.2f, 2.3f }).Should().BeTrue();
+            test.Date.SequenceEqual(new[] { new DateTime(2000, 1, 1), new DateTime(2001, 1, 1) }).Should().Be.True();
+            test.Quantities.SequenceEqual(new[] { 5, 9, 100 }).Should().Be.True();
+            test.Totals.SequenceEqual(new[] { 12.01M, 10.55M, 43M, 107.6M }).Should().Be.True();
+            test.Switches.SequenceEqual(new[] { true, true, false, false, false}).Should().Be.True();
+            test.Radians.SequenceEqual(new[] { 1.2f, 2.3f }).Should().Be.True();
         }
 
         #region Model Under Test
@@ -67,9 +66,9 @@ namespace Args.Tests
             var args = new[] { "5", "Test1.txt", "test5.txt", "backup.sql" };
 
             var test = ordinalModelUnderTest.Value.CreateAndBind(args);
-            test.Id.Should().Be(5);
+            test.Id.Should().Be.EqualTo(5);
 
-            test.FileNames.SequenceEqual(new[] { "Test1.txt", "test5.txt", "backup.sql" }).Should().BeTrue();
+            test.FileNames.SequenceEqual(new[] { "Test1.txt", "test5.txt", "backup.sql" }).Should().Be.True();
         }
 
         #region Model Under Test
@@ -86,8 +85,7 @@ namespace Args.Tests
         [Test]
         public void ErrorTest()
         {
-            Action action = () => Configuration.Configure<InvalidModel>();
-            action.ShouldThrow<InvalidOperationException>();
+            Executing.This(() => Configuration.Configure<InvalidModel>()).Should().Throw<InvalidOperationException>();
         }
     }
 }

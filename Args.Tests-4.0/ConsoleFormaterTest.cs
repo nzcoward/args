@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using System.IO;
 using Args.Help.Formatters;
-using FluentAssertions;
+using SharpTestsEx;
 
 namespace Args.Tests
 {
@@ -47,7 +47,7 @@ namespace Args.Tests
 
             var f = new ConsoleHelpFormatter(80, 1, 5);
 
-            f.GetHelp(help).Should().Be(Properties.Resources.HelpOutput);
+            f.GetHelp(help).Should().Be.EqualTo(Properties.Resources.HelpOutput);
         }
 
         #region Model Under Test
@@ -65,7 +65,7 @@ namespace Args.Tests
 
             var f = new ConsoleHelpFormatter(80, 1, 5);
 
-            f.GetHelp(help).Should().Be("<command> \r\n\r\n\r\n");
+            f.GetHelp(help).Should().Be.EqualTo("<command> \r\n\r\n\r\n");
         }
     }
 }

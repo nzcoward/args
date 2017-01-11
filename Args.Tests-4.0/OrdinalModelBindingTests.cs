@@ -1,11 +1,10 @@
 ﻿using NUnit.Framework;
-
+using SharpTestsEx;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
 
 namespace Args.Tests
 {
@@ -33,11 +32,11 @@ namespace Args.Tests
 
             var ordinalArguments = m.GetOrdinalArguments();
 
-            ordinalArguments.Count().Should().Be(3);
+            ordinalArguments.Count().Should().Be.EqualTo(3);
 
-            ordinalArguments.ElementAt(0).Should().Be(m.Members.GetMemberBindingDefinitionFor(a => a.Name).MemberInfo);
-            ordinalArguments.ElementAt(1).Should().Be(m.Members.GetMemberBindingDefinitionFor(a => a.Count).MemberInfo);
-            ordinalArguments.ElementAt(2).Should().Be(m.Members.GetMemberBindingDefinitionFor(a => a.Value).MemberInfo);            
+            ordinalArguments.ElementAt(0).Should().Be.EqualTo(m.Members.GetMemberBindingDefinitionFor(a => a.Name).MemberInfo);
+            ordinalArguments.ElementAt(1).Should().Be.EqualTo(m.Members.GetMemberBindingDefinitionFor(a => a.Count).MemberInfo);
+            ordinalArguments.ElementAt(2).Should().Be.EqualTo(m.Members.GetMemberBindingDefinitionFor(a => a.Value).MemberInfo);            
         }
 
         [Test]
@@ -47,9 +46,9 @@ namespace Args.Tests
 
             var c = Configuration.Configure<OrdinalModel>().CreateAndBind(args);
 
-            c.Name.Should().Be(args[0]);
-            c.Count.Should().Be(int.Parse(args[1]));
-            c.Value.Should().Be(decimal.Parse(args[2], CultureInfo.InvariantCulture));
+            c.Name.Should().Be.EqualTo(args[0]);
+            c.Count.Should().Be.EqualTo(int.Parse(args[1]));
+            c.Value.Should().Be.EqualTo(decimal.Parse(args[2], CultureInfo.InvariantCulture));
         }
 
         [Test]
@@ -59,10 +58,9 @@ namespace Args.Tests
 
             var m = Configuration.Configure<OrdinalModel>();
 
-            Action action = () => m.CreateAndBind(args);
-
-            action.ShouldThrow<InvalidOperationException>()
-                .And.Message
+            var exception = Executing.This(() => m.CreateAndBind(args))
+                .Should().Throw<InvalidOperationException>()
+                .And.Exception.Message
                 .Should()
                 .EndWith(string.Concat(m.GetOrdinalArguments().Count().ToString(), "."));
         }

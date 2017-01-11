@@ -44,7 +44,7 @@ namespace Args
                 if (defaultValueAttribute != null) memberBinding.DefaultValue = defaultValueAttribute.Value;
 
                 var typeConverterAttribute = memberAttributes.OfType<TypeConverterAttribute>().SingleOrDefault();
-
+                
                 if (typeConverterAttribute != null) memberBinding.TypeConverter = (TypeConverter)ArgsTypeResolver.Current.GetService(Type.GetType(typeConverterAttribute.ConverterTypeName));
 
                 var argsTypeConverterAttribute = memberAttributes.OfType<ArgsTypeConverterAttribute>().SingleOrDefault();

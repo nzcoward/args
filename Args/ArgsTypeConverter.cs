@@ -6,10 +6,10 @@ using System.ComponentModel;
 
 namespace Args
 {
-    internal class ArgsTypeConverter : TypeConverter
+    public class ArgsTypeConverter : TypeConverter
     {
-        internal readonly Type Type;
-        internal readonly IArgsTypeConverter Converter;
+        public Type Type { get; }
+        public IArgsTypeConverter Converter { get; }
 
         public ArgsTypeConverter(Type type, IArgsTypeConverter converter)
         {

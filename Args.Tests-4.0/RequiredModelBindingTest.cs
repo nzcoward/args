@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.ComponentModel.DataAnnotations;
-using FluentAssertions;
-
+using SharpTestsEx;
 
 namespace Args.Tests
 {
@@ -36,8 +35,8 @@ namespace Args.Tests
 
             var test = modelWithRequiredFieldDefinition.Value.CreateAndBind(args);
 
-            test.Id.Should().Be(5);
-            test.Name.Should().Be("my name");
+            test.Id.Should().Be.EqualTo(5);
+            test.Name.Should().Be.EqualTo("my name");
         }
 
         [Test]
@@ -45,8 +44,7 @@ namespace Args.Tests
         {
             var args = new[] { "/n", "my name" };
 
-            Action action = () => modelWithRequiredFieldDefinition.Value.CreateAndBind(args);
-            action.ShouldThrow<InvalidOperationException>();
+            Executing.This(() => modelWithRequiredFieldDefinition.Value.CreateAndBind(args)).Should().Throw<InvalidOperationException>();
         }
     }
 }
