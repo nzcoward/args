@@ -48,7 +48,7 @@ namespace Args
     {
         internal static object GetDefaultValue(this Type type)
         {
-            return type.IsValueType ? Activator.CreateInstance(type) : null;
+            return type.GetTypeInfo().IsValueType ? Activator.CreateInstance(type) : null;
         }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace Args
         {
             if (type == typeof(string)) return null;
 
-            return type.GetInterfaces()
+            return type.GetTypeInfo().GetInterfaces()
                     .Union(new[] { type })
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                    .Where(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                     .SingleOrDefault();
         }
     }

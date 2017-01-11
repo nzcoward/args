@@ -14,8 +14,8 @@ namespace Args
     {
         public void Initialize<TModel>(IModelBindingDefinition<TModel> init)
         {
-            var modelAttribute = typeof(TModel).GetCustomAttributes(true).OfType<ArgsModelAttribute>().SingleOrDefault() ?? ArgsModelAttribute.Default;
-            var modelDescriptionAttribute = typeof(TModel).GetCustomAttributes(true).OfType<DescriptionAttribute>().SingleOrDefault();
+            var modelAttribute = typeof(TModel).GetTypeInfo().GetCustomAttributes(true).OfType<ArgsModelAttribute>().SingleOrDefault() ?? ArgsModelAttribute.Default;
+            var modelDescriptionAttribute = typeof(TModel).GetTypeInfo().GetCustomAttributes(true).OfType<DescriptionAttribute>().SingleOrDefault();
 
             init.SwitchDelimiter = modelAttribute.SwitchDelimiter;
             init.StringComparer = modelAttribute.StringComparer;
@@ -59,8 +59,8 @@ namespace Args
 
         protected virtual IEnumerable<MemberInfo> GetMembers(Type modelType)
         {
-            return modelType.GetFields(BindingFlags.Instance | BindingFlags.Public)
-                .Concat(modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => p.CanWrite).Cast<MemberInfo>());
+            return modelType.GetTypeInfo().GetFields(BindingFlags.Instance | BindingFlags.Public)
+                .Concat(modelType.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => p.CanWrite).Cast<MemberInfo>());
         }
 
         protected virtual string DeriveShortName(IEnumerable<MemberInfo> members, MemberInfo currentMember)

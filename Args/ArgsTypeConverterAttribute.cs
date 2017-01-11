@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Args
@@ -12,7 +13,7 @@ namespace Args
 
         public ArgsTypeConverterAttribute(Type argsConverterType)
         {
-            if (argsConverterType.GetInterfaces().Where(i => i == typeof(IArgsTypeConverter)).Any() == false)
+            if (argsConverterType.GetTypeInfo().GetInterfaces().Where(i => i == typeof(IArgsTypeConverter)).Any() == false)
                 throw new InvalidOperationException(String.Format("Type {0} must implement interface {1}", argsConverterType.Name, typeof(IArgsTypeConverter).Name));
 
             ArgsTypeConverterType = argsConverterType;

@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "System.ComponentModel.Annotations": "4.3.0",
+    "System.ComponentModel.TypeConverter": "4.3.0",
+    "System.Runtime.Serialization.Formatters": "4.3.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+
+  "scripts": {
+    "postcompile": [
+      "dotnet pack -o C:\\Users\\j.stewart\\Source\\Repos\\packages --no-build --configuration %compile:Configuration%"
+    ]
+  }
+}

@@ -41,7 +41,7 @@ namespace Args
 
         public MemberBindingDefinition(MemberInfo memberInfo, ModelBindingDefinition<TModel> parent)
         {
-            if (memberInfo.DeclaringType.IsAssignableFrom(typeof(TModel)) == false) throw new InvalidOperationException(String.Format("memberInfo must be from type {0}", typeof(TModel).FullName));
+            if (memberInfo.DeclaringType.GetTypeInfo().IsAssignableFrom(typeof(TModel)) == false) throw new InvalidOperationException(String.Format("memberInfo must be from type {0}", typeof(TModel).FullName));
             MemberInfo = memberInfo;
             Parent = parent;
             SwitchValues = new Collection<string>();
@@ -63,7 +63,7 @@ namespace Args
 
                 if (declaredType != typeof(string) && genericIEnumerable != null)
                 {
-                    var collectionType = genericIEnumerable.GetGenericArguments()[0];
+                    var collectionType = genericIEnumerable.GetTypeInfo().GetGenericArguments()[0];
                     typeConverter = TypeConverter ?? Parent.TryGetTypeConverter(collectionType) ?? GetDefaultTypeConveter(collectionType);
 
                     if (typeConverter.CanConvertFrom(typeof(string)) == false)
@@ -71,12 +71,12 @@ namespace Args
 
                     var convertedValues = value.Select(v => typeConverter.ConvertFrom(null, CultureInfo.InvariantCulture, v));
 
-                    if (declaredType.IsAssignableFrom(collectionType.MakeArrayType()))
+                    if (declaredType.GetTypeInfo().IsAssignableFrom(collectionType.MakeArrayType()))
                         newValue = convertedValues.ToArray().Convert(collectionType);
-                    else if (typeof(IList).IsAssignableFrom(declaredType) || typeof(ICollection<>).MakeGenericType(collectionType).IsAssignableFrom(declaredType))
+                    else if (typeof(IList).GetTypeInfo().IsAssignableFrom(declaredType) || typeof(ICollection<>).MakeGenericType(collectionType).GetTypeInfo().IsAssignableFrom(declaredType))
                     {
                         newValue = ArgsTypeResolver.Current.GetService(declaredType);
-                        var methodInfo = declaredType.GetMethod("Add");
+                        var methodInfo = declaredType.GetTypeInfo().GetMethod("Add");
 
                         if (methodInfo == null) throw new InvalidOperationException(String.Format(Properties.Resources.AddMethodNotFoundMessage, declaredType.Name));
 
